@@ -1,0 +1,74 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Función que calcula el total de las ventas
+float totalSale(float sales[], int n) {
+    float total = 0;
+    for (int i = 0; i < n; i++) {
+        total += sales[i];
+    }
+    return total;
+}
+
+// Función que encuentra la venta máxima
+float maxSale(float sales[], int n) {
+    float max = sales[0];
+    for (int i = 1; i < n; i++) {
+        if (sales[i] > max) {
+            max = sales[i];
+        }
+    }
+    return max;
+}
+
+int main() {
+    FILE *fp;
+    if ((fp = fopen("sales.txt", "r")) == NULL) {
+        printf("Ha sido imposible abrir el archivo\n");
+        return -1;
+    }
+    printf("Archivo abierto con éxito\n");
+
+    // Contar líneas (número de ventas)
+    int lines = 0;
+    char c;
+    while ((c = fgetc(fp)) != EOF) {
+        if (c == '\n') lines++;
+    }
+    rewind(fp);
+    lines++; // Para contar la última línea si no termina en '\n'
+
+    printf("El archivo tiene %d ventas\n", lines);
+
+    // Reservar memoria dinámica
+    float *ventas = (float*) malloc(lines * sizeof(float));
+    if (ventas == NULL) {
+        printf("No se pudo reservar memoria\n");
+        fclose(fp);
+        return -1;
+    }
+
+    // Leer valores de ventas
+    for (int i = 0; i < lines; i++) {
+        if (fscanf(fp, "%f", &ventas[i]) != 1) {
+            printf("Error al leer la línea %d\n", i + 1);
+            free(ventas);
+            fclose(fp);
+            return -1;
+        }
+    }
+
+    // Usar las funciones
+    float total = totalSale(ventas, lines);
+    float max = maxSale(ventas, lines);
+
+    // Imprimir resultados
+    printf("Total de ventas: %.2f\n", total);
+    printf("Venta máxima: %.2f\n", max);
+
+    // Liberar memoria y cerrar archivo
+    free(ventas);
+    fclose(fp);
+
+    return 0;
+}
