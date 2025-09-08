@@ -1,0 +1,61 @@
+#include <stdio.h>
+#include <stdlib.h>
+int main()
+{
+   /*/Write the algorithm that reads an N x M matrix and prints out the
+elements in “spiral form”./*/
+
+    //Create matrix 
+    int rows, cols;
+    
+    printf("Ingresa las filas:");
+    scanf("%d",&rows);
+    printf("Ingresa las columnas:");
+    scanf("%d",&cols);
+    
+        //Save memory
+        int *A=(int*)malloc((size_t)rows*(size_t)cols*sizeof(int));
+
+        //fill it
+        printf("Ingresa los valores de la matriz:\n");
+    
+        for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            printf("Elemento [%d][%d]: ", i, j);
+            scanf("%d", &A[i * cols + j]);
+        }
+    }
+
+
+        //print in spiral form
+        int top=0, bottom=rows-1;
+        int left=0, right=cols-1;
+        
+        printf("\nMatriz en espiral\n");
+        while (top <= bottom && left <= right) {
+        // Fila superior
+        for (int j = left; j <= right; j++)
+            printf("%d ", A[top * cols + j]);
+        top++;
+
+        // Columna derecha
+        for (int i = top; i <= bottom; i++)
+            printf("%d ", A[i * cols + right]);
+        right--;
+
+        // Fila inferior
+        if (top <= bottom) {
+            for (int j = right; j >= left; j--)
+                printf("%d ", A[bottom * cols + j]);
+            bottom--;
+        }
+
+        // Columna izquierda
+        if (left <= right) {
+            for (int i = bottom; i >= top; i--)
+                printf("%d ", A[i * cols + left]);
+            left++;
+        }
+    }
+        
+}
